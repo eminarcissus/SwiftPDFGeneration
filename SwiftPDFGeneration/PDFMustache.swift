@@ -11,24 +11,24 @@ import Foundation
 import Mustache
 import Quartz
 
-func generateMustachePDF(pdfLocation: String) -> Void {
+func generateMustachePDF(_ pdfLocation: String) -> Void {
     // Load the `document.mustache` resource of the main bundle
     
     do {
         let template = try Template(named: "document")
         
         // Let template format dates with `{{format(...)}}`
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .MediumStyle
-        template.registerInBaseContext("format", Box(dateFormatter))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        template.register(Box(dateFormatter), forKey: "format")
         
         // The rendered data
         let data = [
             "name": "Arthur",
-            "date": NSDate(),
-            "realDate": NSDate().dateByAddingTimeInterval(60*60*24*3),
+            "date": Date(),
+            "realDate": Date().addingTimeInterval(60*60*24*3),
             "late": true
-        ]
+        ] as [String : Any]
         
         // The rendering: "Hello Arthur..."
         let rendering = try template.render(Box(data))
@@ -45,9 +45,9 @@ func generateMustachePDF(pdfLocation: String) -> Void {
         
         let aPDFDocument = PDFDocument()
 
-        aPDFDocument.insertPage(coverPage, atIndex: 0)
+        aPDFDocument.insert(coverPage, at: 0)
 
-        aPDFDocument.writeToFile(pdfLocation)
+        aPDFDocument.write(toFile: pdfLocation)
 
         
     } catch {
@@ -95,19 +95,19 @@ class MustachePDFPage: BasePDFPage{
         
         // add black background to show printable area used by Mustache template
         let mustacheFontAttributes = [
-            NSFontAttributeName: mustacheFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: mustacheFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName: mustacheParagraphStyle,
-            NSForegroundColorAttributeName: NSColor.whiteColor(),
-            NSBackgroundColorAttributeName: NSColor.blackColor()
+            NSForegroundColorAttributeName: NSColor.white,
+            NSBackgroundColorAttributeName: NSColor.black
         ]
         
         let mustacheRect = NSMakeRect(pdfMustacheX, pdfMustacheY, pdfMustacheWidth, pdfMustacheHeight)
-        self.mustacheCopy.drawInRect(mustacheRect, withAttributes: mustacheFontAttributes)
+        self.mustacheCopy.draw(in: mustacheRect, withAttributes: mustacheFontAttributes)
         
     }
     
-    override func drawWithBox(box: PDFDisplayBox) {
-        super.drawWithBox(box)
+    override func draw(with box: PDFDisplayBox) {
+        super.draw(with: box)
         self.drawPDFMustacheCopy()
     }
     

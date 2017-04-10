@@ -28,12 +28,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ["columnIdentifier":"col8","columnTitle":"Column Title 8"],
     ]
     
-    func applicationDidFinishLaunching(aNotification: NSNotification)
+    func applicationDidFinishLaunching(_ aNotification: Notification)
     {
         self.dataArray = self.createDemoData()
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         
     }
 
@@ -51,39 +51,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 "col7":"col 7 data \(i)",
                 "col8":"col 8 data \(i)"
             ]
-            mArray.addObject(dict)
+            mArray.add(dict)
         }
-        return Array(mArray)
+        return Array(mArray) as Array<AnyObject>
     }
 
-    @IBAction func generatePDFButton (sender:NSButton){
+    @IBAction func generatePDFButton (_ sender:NSButton){
 
         let savePanel = NSSavePanel()
         
-        savePanel.beginWithCompletionHandler { (result: Int) -> Void in
+        savePanel.begin { (result: Int) -> Void in
             if result == NSFileHandlingPanelOKButton {
-                if let url = savePanel.URL {
-                    let path = url.path! as String
+                if let url = savePanel.url {
+                    let path = url.path as String
                     self.generatePDF(path + ".pdf")
                 }
             }
         }
     }
 
-    @IBAction func generatePDFMustacheButton(sender: NSButton) {
+    @IBAction func generatePDFMustacheButton(_ sender: NSButton) {
         let savePanel = NSSavePanel()
         
-        savePanel.beginWithCompletionHandler { (result: Int) -> Void in
+        savePanel.begin { (result: Int) -> Void in
             if result == NSFileHandlingPanelOKButton {
-                if let url = savePanel.URL {
-                    let path = url.path! as String
+                if let url = savePanel.url {
+                    let path = url.path as String
                     generateMustachePDF(path + ".pdf")
                 }
             }
         }
     }
 
-    func generatePDF (pdfLocation: String) -> Void {
+    func generatePDF (_ pdfLocation: String) -> Void {
         let aPDFDocument = PDFDocument()
         
         let coverPage = CoverPDFPage(hasMargin: true,
@@ -98,7 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         
         
-        aPDFDocument.insertPage(coverPage, atIndex: 0)
+        aPDFDocument.insert(coverPage, at: 0)
         
         let pageWidth = (CGFloat(Float(self.columnInformationArray.count)) * defaultColumnWidth) + leftMargin
         let pageHeight = topMargin + verticalPadding + (CGFloat(numberOfRowsPerPage + 1) * defaultRowHeight) + verticalPadding + bottomMargin
@@ -130,12 +130,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                                  hasPageNumber: true,
                                                  pageNumber: i+1,
                                                  pdfData: pdfDataArray,
-                                                 columnArray: columnInformationArray)
+                                                 columnArray: columnInformationArray as [AnyObject])
             
-            aPDFDocument.insertPage(tabularDataPDF, atIndex: i+1)
+            aPDFDocument.insert(tabularDataPDF, at: i+1)
         }
         
-        aPDFDocument.writeToFile(pdfLocation)
+        aPDFDocument.write(toFile: pdfLocation)
     }
     
     
@@ -155,11 +155,11 @@ class BasePDFPage :PDFPage{
     var pdfHeight = CGFloat(1024.0) //This is configurable
     var pdfWidth = CGFloat(768.0)   //This is configurable and is calculated based on the number of columns
 
-    func drawLine( fromPoint:NSPoint,  toPoint:NSPoint){
+    func drawLine( _ fromPoint:NSPoint,  toPoint:NSPoint){
         let path = NSBezierPath()
-        NSColor.lightGrayColor().set()
-        path.moveToPoint(fromPoint)
-        path.lineToPoint(toPoint)
+        NSColor.lightGray.set()
+        path.move(to: fromPoint)
+        path.line(to: toPoint)
         path.lineWidth = 0.5
         path.stroke()
         
@@ -177,12 +177,12 @@ class BasePDFPage :PDFPage{
         headerParagraphStyle.alignment = NSRightTextAlignment
         
         let headerFontAttributes = [
-            NSFontAttributeName: headerFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: headerFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName:headerParagraphStyle,
-            NSForegroundColorAttributeName:NSColor.lightGrayColor()
+            NSForegroundColorAttributeName:NSColor.lightGray
         ]
         let headerRect = NSMakeRect(headerTextX, headerTextY, headerTextWidth, headerTextHeight)
-        self.headerText.drawInRect(headerRect, withAttributes: headerFontAttributes)
+        self.headerText.draw(in: headerRect, withAttributes: headerFontAttributes)
 
     }
     
@@ -198,19 +198,19 @@ class BasePDFPage :PDFPage{
         footerParagraphStyle.alignment = NSLeftTextAlignment
         
         let footerFontAttributes = [
-            NSFontAttributeName: footerFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: footerFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName:footerParagraphStyle,
-            NSForegroundColorAttributeName:NSColor.lightGrayColor()
+            NSForegroundColorAttributeName:NSColor.lightGray
         ]
         
         let footerRect = NSMakeRect(footerTextX, footerTextY, footerTextWidth, footerTextHeight)
-        self.footerText.drawInRect(footerRect, withAttributes: footerFontAttributes)
+        self.footerText.draw(in: footerRect, withAttributes: footerFontAttributes)
 
     }
     
     func drawMargins(){
         let borderLine = NSMakeRect(leftMargin, bottomMargin, self.pdfWidth - leftMargin - rightMargin, self.pdfHeight - topMargin - bottomMargin)
-        NSColor.grayColor().set()
+        NSColor.gray.set()
         NSFrameRectWithWidth(borderLine, 0.5)
     }
     
@@ -227,23 +227,23 @@ class BasePDFPage :PDFPage{
             pageNumParagraphStyle.alignment = NSCenterTextAlignment
             
             let pageNumFontAttributes = [
-                NSFontAttributeName: pageNumFont ?? NSFont.labelFontOfSize(12),
+                NSFontAttributeName: pageNumFont ?? NSFont.labelFont(ofSize: 12),
                 NSParagraphStyleAttributeName:pageNumParagraphStyle,
-                NSForegroundColorAttributeName: NSColor.darkGrayColor()
+                NSForegroundColorAttributeName: NSColor.darkGray
             ]
             
             let pageNumRect = NSMakeRect(pageNumTextX, pageNumTextY, pageNumTextWidth, pageNumTextHeight)
             let pageNumberStr = "\(self.pageNumber)"
-            pageNumberStr.drawInRect(pageNumRect, withAttributes: pageNumFontAttributes)
+            pageNumberStr.draw(in: pageNumRect, withAttributes: pageNumFontAttributes)
 
     }
     
-    override func boundsForBox(box: PDFDisplayBox) -> NSRect
+    override func bounds(for box: PDFDisplayBox) -> NSRect
     {
         return NSMakeRect(0, 0, pdfWidth, pdfHeight)
     }
 
-    override func drawWithBox(box: PDFDisplayBox) {
+    override func draw(with box: PDFDisplayBox) {
         if hasPageNumber{
             self.drawPageNumbers()
         }
@@ -300,7 +300,7 @@ class CoverPDFPage: BasePDFPage{
             hasPageNumber: hasPageNumber,
             pageNumber: pageNumber)
         
-        self.pdfTitle = title
+        self.pdfTitle = title as NSString
         self.creditInformation = creditInformation
     }
 
@@ -316,13 +316,13 @@ class CoverPDFPage: BasePDFPage{
         titleParagraphStyle.alignment = NSCenterTextAlignment
         
         let titleFontAttributes = [
-            NSFontAttributeName: titleFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: titleFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName:titleParagraphStyle,
-            NSForegroundColorAttributeName: NSColor.blueColor()
+            NSForegroundColorAttributeName: NSColor.blue
         ]
         
         let titleRect = NSMakeRect(pdfTitleX, pdfTitleY, pdfTitleWidth, pdfTitleHeight)
-        self.pdfTitle.drawInRect(titleRect, withAttributes: titleFontAttributes)
+        self.pdfTitle.draw(in: titleRect, withAttributes: titleFontAttributes)
         
     }
     
@@ -338,18 +338,18 @@ class CoverPDFPage: BasePDFPage{
         creditParagraphStyle.alignment = NSCenterTextAlignment
         
         let creditFontAttributes = [
-            NSFontAttributeName: creditFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: creditFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName:creditParagraphStyle,
-            NSForegroundColorAttributeName: NSColor.darkGrayColor()
+            NSForegroundColorAttributeName: NSColor.darkGray
         ]
         
         let creditRect = NSMakeRect(pdfCreditX, pdfCreditY, pdfCreditWidth, pdfCreditHeight)
-        self.creditInformation.drawInRect(creditRect, withAttributes: creditFontAttributes)
+        self.creditInformation.draw(in: creditRect, withAttributes: creditFontAttributes)
 
     }
     
-    override func drawWithBox(box: PDFDisplayBox) {
-        super.drawWithBox(box)
+    override func draw(with box: PDFDisplayBox) {
+        super.draw(with: box)
         self.drawPDFTitle()
         self.drawPDFCreditInformation()
     }
@@ -357,8 +357,8 @@ class CoverPDFPage: BasePDFPage{
 }
 
 class TabularPDFPage: BasePDFPage{
-    var dataArray = []
-    var columnsArray = []
+    var dataArray : [AnyObject] = []
+    var columnsArray : [AnyObject] = []
     var verticalPadding = CGFloat(10.0)
     
     init(hasMargin:Bool,
@@ -394,9 +394,9 @@ class TabularPDFPage: BasePDFPage{
         titleParagraphStyle.alignment = NSCenterTextAlignment
         
         let titleFontAttributes = [
-            NSFontAttributeName: titleFont ?? NSFont.labelFontOfSize(12),
+            NSFontAttributeName: titleFont ?? NSFont.labelFont(ofSize: 12),
             NSParagraphStyleAttributeName:titleParagraphStyle,
-            NSForegroundColorAttributeName: NSColor.grayColor()
+            NSForegroundColorAttributeName: NSColor.gray
         ]
         
         for i in 0  ..< self.columnsArray.count {
@@ -408,13 +408,13 @@ class TabularPDFPage: BasePDFPage{
                 defaultColumnWidth,
                 defaultRowHeight)
             
-            columnTitle.drawInRect(headerRect, withAttributes: titleFontAttributes)
+            columnTitle.draw(in: headerRect, withAttributes: titleFontAttributes)
             
         }
         
         let keys = NSMutableArray()
         for columnInfo in self.columnsArray{
-            keys.addObject(columnInfo["columnIdentifier"] as! String)
+            keys.add(columnInfo["columnIdentifier"] as! String)
             
         }
         
@@ -430,7 +430,7 @@ class TabularPDFPage: BasePDFPage{
                     defaultColumnWidth,
                     defaultRowHeight
                 )
-                dataText.drawInRect(dataRect, withAttributes: nil)
+                dataText.draw(in: dataRect, withAttributes: nil)
             }
         }
 
@@ -470,8 +470,8 @@ class TabularPDFPage: BasePDFPage{
 
     }
     
-    override func drawWithBox(box: PDFDisplayBox) {
-        super.drawWithBox(box)
+    override func draw(with box: PDFDisplayBox) {
+        super.draw(with: box)
         self.drawTableData()
         self.drawVerticalGrids()
         self.drawHorizontalGrids()

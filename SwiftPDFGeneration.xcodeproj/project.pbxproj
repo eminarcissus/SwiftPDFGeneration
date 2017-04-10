@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		52210AFA1CF60F3800547EB7 /* Mustache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52210AF91CF60F3800547EB7 /* Mustache.framework */; };
 		52210AFB1CF60F3800547EB7 /* Mustache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52210AF91CF60F3800547EB7 /* Mustache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		52210AFE1CF60F5100547EB7 /* Mustache.framework.dSYM in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52210AFD1CF60F5100547EB7 /* Mustache.framework.dSYM */; };
 		52210B001CF60FF000547EB7 /* document.mustache in Resources */ = {isa = PBXBuildFile; fileRef = 52210AFF1CF60FF000547EB7 /* document.mustache */; };
 		52210B021CF6101600547EB7 /* PDFMustache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52210B011CF6101600547EB7 /* PDFMustache.swift */; };
 		68D49C611C5E8B6900F5320D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D49C601C5E8B6900F5320D /* AppDelegate.swift */; };
@@ -25,7 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				52210AFE1CF60F5100547EB7 /* Mustache.framework.dSYM in Embed Frameworks */,
 				52210AFB1CF60F3800547EB7 /* Mustache.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -35,7 +33,6 @@
 
 /* Begin PBXFileReference section */
 		52210AF91CF60F3800547EB7 /* Mustache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mustache.framework; path = Carthage/Build/Mac/Mustache.framework; sourceTree = "<group>"; };
-		52210AFD1CF60F5100547EB7 /* Mustache.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Mustache.framework.dSYM; path = Carthage/Build/Mac/Mustache.framework.dSYM; sourceTree = "<group>"; };
 		52210AFF1CF60FF000547EB7 /* document.mustache */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = document.mustache; sourceTree = "<group>"; };
 		52210B011CF6101600547EB7 /* PDFMustache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFMustache.swift; sourceTree = "<group>"; };
 		68D49C5D1C5E8B6900F5320D /* SwiftPDFGeneration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftPDFGeneration.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,7 +58,6 @@
 		68D49C541C5E8B6900F5320D = {
 			isa = PBXGroup;
 			children = (
-				52210AFD1CF60F5100547EB7 /* Mustache.framework.dSYM */,
 				52210AF91CF60F3800547EB7 /* Mustache.framework */,
 				68D49C5F1C5E8B6900F5320D /* SwiftPDFGeneration */,
 				68D49C5E1C5E8B6900F5320D /* Products */,
@@ -122,6 +118,7 @@
 				TargetAttributes = {
 					68D49C5C1C5E8B6900F5320D = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -274,6 +271,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = KS.SwiftPDFGeneration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -290,6 +288,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = KS.SwiftPDFGeneration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
